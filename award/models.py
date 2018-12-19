@@ -1,29 +1,32 @@
+    
+108 lines (84 sloc)  3.13 KB
+from django.db import models
+from django.contrib.auth.models import User
+import datetime as dt
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-from django.shortcuts import render,redirect,get_object_or_404
-from django.http import HttpResponse,Http404
-from django.contrib.auth.decorators import login_required
-from .models import Project,Profile,Rate
-# from .forms import ProjectForm,ProfileForm,RateForm
-# from django.contrib.auth.models import User
-# import datetime as dt
-# from rest_framework.response import Response
-# from rest_framework.views import APIView
-# from .serializer import ProfileSerializer,ProjectSerializer
-# from rest_framework import status
-# from .permissions import IsAdminOrReadOnly
 
-def convert_dates(dates):
-    # function that gets the weekday number for the date.
-    day_number = dt.date.weekday(dates)
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
-    days = ['Monday','Tuesday','Wednesday','thursday','Friday','Saturday','Sunday']
-    '''
-    Returns the actual day of the week
-    '''
-    day = days[day_number]
-    return day
 
-def index_page(request):
-    date = dt.date.today()
-    project = Project.objects.all()
-    return render(request,'home.html',locals())
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+class Profile(models.Model):
+    Profile_photo = models.ImageField(upload_to = 'images/',blank=True)
+    Bio = models.TextField(max_length = 50,null = True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
+    rate = models.ManyToManyField('Project', related_name='image',max_length=30)
+
+    def save_profile(self):
+        self.save()
+
+    @classmethod
+    def get_by_id(cls, id):
+        details = Profile.objects.get(user = id)
+        return details
