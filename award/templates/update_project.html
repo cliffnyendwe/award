@@ -1,0 +1,21 @@
+{%extends 'base.html'%}
+{% load materialize %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row" id="project">
+        <div class="col-md-2"></div>
+        <div class="col-md-8" id="formpro">
+            <h5>UPLOAD NEW PROJECTS</h5>
+            <form  action="{%url 'update_profile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.field }}
+                <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                </form>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+{% endblock %}

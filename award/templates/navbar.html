@@ -28,8 +28,58 @@
 
     <body>
         <script type="text/javascript" src="js/materialize.min.js"></script>
-        <nav>
-            <!-- navbar content here  -->
+        <nav style="background-color:#00897b;">
+            <a class="btn btn-outline-primary" style="font-size:x-large;" href="">Awards</a>
+            <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'index_page' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'update_project' %}">Post Project</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' profile.id %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/accounts/login">Login</a>
+                    </li>
+                    {% endif %} -->
+
+            <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Account</a>
+
+            <!-- Dropdown Structure -->
+            <ul id='dropdown1' class='dropdown-content'>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index_page' %}">Home</a>
+                </li> {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'update_project' %}">Post Project</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' profile.id %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/login">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+
+            </ul>
+            <form  role="search" action="{% url 'search' %}">
+                      <input class="form-control mr-sm-2" type="search" placeholder="Search projects" aria-label="Search" name="project">
+                      <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+            </div>
         </nav>
 
         <ul id="slide-out" class="sidenav">
@@ -58,6 +108,8 @@
             $(document).ready(function () {
                 $('.sidenav').sidenav();
             });
+
+            $('.dropdown-trigger').dropdown();
         </script>
     </body>
 

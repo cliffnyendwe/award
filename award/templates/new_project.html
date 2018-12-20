@@ -1,0 +1,17 @@
+{% load materialize %}
+{% load staticfiles %}
+{%block content %}
+
+<div class="container">
+    <h3>Project</h3>
+    <hr>
+    <form  action="{%url 'new_project'%}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.field_1|as_material:"s12" }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
