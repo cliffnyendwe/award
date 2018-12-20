@@ -1,6 +1,6 @@
 
 {% extends 'base.html' %}
-{% load bootstrap4 %}
+{% load static %}
 {% block content %}
 {{ block.super }}
 <div class="container-fluid home-content">
@@ -38,7 +38,7 @@
     </section>
 </div>
 <div class="container-fluid" id="pro">
-    <h5><strong>Nominees</strong> We need your vote!</h5>
+ 
     <div class="row">
         {% for data in project %}
 

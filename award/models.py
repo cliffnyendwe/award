@@ -1,32 +1,31 @@
-    
-108 lines (84 sloc)  3.13 KB
-from django.db import models
-from django.contrib.auth.models import User
-import datetime as dt
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+   
+# from django.db import models
+# from django.contrib.auth.models import User
+# import datetime as dt
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
 
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
 
-class Profile(models.Model):
-    Profile_photo = models.ImageField(upload_to = 'images/',blank=True)
-    Bio = models.TextField(max_length = 50,null = True)
-    user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
-    rate = models.ManyToManyField('Project', related_name='image',max_length=30)
+# class Profile(models.Model):
+#     Profile_photo = models.ImageField(upload_to = 'images/',blank=True)
+#     Bio = models.TextField(max_length = 50,null = True)
+#     user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
+#     rate = models.ManyToManyField('Project', related_name='image',max_length=30)
 
-    def save_profile(self):
-        self.save()
+#     def save_profile(self):
+#         self.save()
 
-    @classmethod
-    def get_by_id(cls, id):
-        details = Profile.objects.get(user = id)
-        return details
+#     @classmethod
+#     def get_by_id(cls, id):
+#         details = Profile.objects.get(user = id)
+#         return details
