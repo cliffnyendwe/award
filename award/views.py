@@ -24,11 +24,11 @@ def convert_dates(dates):
 
 # Create your views here.
 # @login_required(login_url='/accounts/login')
-def home_page(request):
+def index_page(request):
     date = dt.date.today()
     project = Project.objects.all()
     # profile = User.objects.get(username=request.user)
-    return render(request,'home.html',locals())
+    return render(request,'index.html',locals())
 
 @login_required(login_url='/accounts/login')
 def upload_project(request):
@@ -38,7 +38,7 @@ def upload_project(request):
             upload = uploadform.save(commit=False)
             upload.profile = request.user.profile
             upload.save()
-            return redirect('home_page')
+            return redirect('index_page')
     else:
         uploadform = ProjectForm()
     return render(request,'update-project.html',locals())
