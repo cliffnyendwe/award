@@ -1,5 +1,4 @@
 {%extends base.html %}
-{% load materialize %}
 {% load static %}
 
 {% block content %}
@@ -8,11 +7,10 @@
         <h2>New Rating</h2>
     </div>
     <hr>
-    <form  action="{%url 'rating' idd %}" method="post" enctype="multipart/form-data">
+    <form action="{% url 'rate'  project.id %}" method="POST" enctype="multipart/form-data" id="ratingform">
         {% csrf_token %}
         {{ form.field }}
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
+        <input type="submit" class="btn btn-outline-success" value="Upload">
     </form>
+
 {% endblock %}

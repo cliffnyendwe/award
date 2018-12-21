@@ -1,33 +1,29 @@
-{% extends 'base.html' %}
-{% load materialize %}
+{%extends 'base.html'%}
 {% block content %}
+<div class="container" id="search">
 
-<div class="container-fluid">
-        <h2>Search Results</h2>
-    <hr>
-
-    {% if searched_projects %}
-    <h4>Found {{ searched_projects|length }} projects '{{message}}'</h4>
+  <div class="row">
+    {% if project%}
+    <h2>Found {{ projectlength }} of searched term {{message}}</h2>
     {% else %}
-    <h4> Found no project '{{message}}'</h4>
+    <h2> Found no project {{message}}</h2>
     {% endif %}
 
-    {% if searched_projects %}
-    <ul class="list-group list-group-flush">
-        {% for project in searched_projects %}
-        <li class="list-group-item" style="background-color: transparent;">
-            <p class="firstletter">{{project.title}}
-                <a href="{% url 'project' project.id %}" style="float:right;">
-                    <button type="button" class="btn btn-info">View</button>
-                </a>
-            </p>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+  </div>
 
+  <div class="row">
 
+    {% if project %}
+    {% for item in project %}
 
+    <div class="col-md-6">
+      <div class="card">
+        <h1>{{project.project_name}}</h1>
+        <img src="{{project.screenshot.url}}" class="image-responsive" style="height:300px;width:600px" data-toggle="tooltip">
+      </div>
+    </div>
 </div>
-
+</div>
+{% endfor %}
+{% endif %}
 {% endblock %}
