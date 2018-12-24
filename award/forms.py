@@ -1,19 +1,17 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from .models import Project, Profile, Rate
+from .models import Project,Profile
 
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        exclude = ['user', 'pub_date', 'profile']
+        exclude = ['profile']
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user','rate']
+        exclude = ['user']
 
-class RateForm(forms.ModelForm):
+class VoteForm(forms.ModelForm):
     class Meta:
-        model =Rate
-        exclude= ['user','project']
+        model = Project
+        exclude = ['link','description','profile','image','title']

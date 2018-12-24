@@ -1,29 +1,25 @@
 {%extends 'base.html'%}
 {% block content %}
-<div class="container" id="search">
+<div class="container">
 
   <div class="row">
-    {% if project%}
-    <h2>Found {{ projectlength }} of searched term {{message}}</h2>
+    {% if projects%}
+      <h2>Found {{ projects|length }} of searched term {{message}}</h2>
     {% else %}
-    <h2> Found no project {{message}}</h2>
+      <h2> Found no projects for the search term {{message}}</h2>
     {% endif %}
 
   </div>
 
   <div class="row">
 
-    {% if project %}
-    {% for item in project %}
-
-    <div class="col-md-6">
-      <div class="card">
-        <h1>{{project.project_name}}</h1>
-        <img src="{{project.screenshot.url}}" class="image-responsive" style="height:300px;width:600px" data-toggle="tooltip">
+  {% if projects %}
+    {% for project in projects %}
+      <div class="col-sm-6 col-md-3">
+        <a href="/project-detail/{{project.id}}">{{project.title}}</a>
       </div>
-    </div>
+    {% endfor %}
+  {% endif %}
+  </div>
 </div>
-</div>
-{% endfor %}
-{% endif %}
 {% endblock %}

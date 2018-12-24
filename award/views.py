@@ -1,14 +1,16 @@
-from django.shortcuts import render,redirect,get_object_or_404
-from django.http import HttpResponse,Http404
+from django.shortcuts import render,redirect
+from django.http import HttpResponse,HttpResponseRedirect,Http404
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from .models import Project,Profile,Rate
-from .forms import ProjectForm,ProfileForm,RateForm
-from django.contrib.auth.models import User
-import datetime as dt
+from .forms import ProjectForm,ProfileForm,VoteForm
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .models import  Project,Profile,AwardsProfiles,AwardsProjects
+from .serializer import ProfileSerializer,ProjectSerializer
 from rest_framework import status
 from .permissions import IsAdminOrReadOnly
+import datetime as dt
+
 def convert_dates(dates):
     # function that gets the weekday number for the date.
     day_number = dt.date.weekday(dates)
@@ -20,121 +22,101 @@ def convert_dates(dates):
     day = days[day_number]
     return day
 
-def index_page(request):
-    date = dt.date.today()
-    project = Project.objects.all()
-    return render(request,'index.html',locals())
+def index(request):
+    current_user = request.user
+    projects = Project.objects.all().order_by()
+    return render(request,'index.html', {'projects':projects})
 
-@login_required(login_url='/accounts/login')
-def upload_project(request):
+@login_required(login_url='/accounts/login/')
+def myprojects(request):
+    projects = Project.objects.all().order_by()
+    return render(request,'myprojects.html', {'projects':projects})
+
+def project(request,project_id):
+    project = Project.objects.get(id = project_id)
+    rating = round(((project.design + project.usability + project.content)/3),2)
     if request.method == 'POST':
-        uploadform = ProjectForm(request.POST, request.FILES)
-        if uploadform.is_valid():
-            upload = uploadform.save(commit=False)
-            upload.profile = request.user.profile
-            upload.save()
-            return redirect('index_page')
+        form = VoteForm(request.POST)
+        if form.is_valid:
+            if project.design == 1:
+                project.design = int(request.POST['design'])
+            else:
+                project.design = (project.design + int(request.POST['design']))/2
+            if project.usability == 1:
+                project.usability = int(request.POST['usability'])
+            else:
+                project.usability = (project.design + int(request.POST['usability']))/2
+            if project.content == 1:
+                project.content = int(request.POST['content'])
+            else:
+              project.content = (project.design + int(request.POST['content']))/2
+            project.save()
     else:
-        uploadform = ProjectForm()
-    return render(request,'update_project.html',locals())
+        form = VoteForm()
+    return render(request,'project.html',{'form':form,'project':project,'rating':rating})
 
-def view_project(request):
-    project = Project.objects.get_all()
-    return render(request,'index.html', locals())
+@login_required(login_url='/accounts/login/')
+def new_projects(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.user = current_user
+            project.save()
+        return redirect('index')
+
+    else:
+        form = ProjectForm()
+    return render(request, 'new_project.html', {"form": form})
+
+@login_required(login_url='/accounts/login/')
+def profile(request):
+    current_user = request.user
+    # projects = project.objects.filter(profile=current_user)
+
+    print(current_user)
+
+    return render(request, 'profile.html',{'profile':profile})
+
+def newprofile(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit = False)
+            profile.project = current_user
+            profile.save()
+        return redirect('index.html')
+    else:
+        form = ProfileForm()
+    return render(request,'newprofile.html',{'form':form})
 
 def search_results(request):
-    profile= Profile.objects.all()
-    project= Project.objects.all()
-    if 'Project' in request.GET and request.GET["project"]:
+
+    if 'project' in request.GET and request.GET["project"]:
         search_term = request.GET.get("project")
-        searched_project = Project.search_by_profile(search_term)
+        searched_projects = project.search_by_title(search_term)
         message = f"{search_term}"
 
-        return render(request, 'search.html',locals())
+        return render(request, 'search.html',{"message":message,"projects": searched_projects})
 
     else:
         message = "You haven't searched for any term"
-        return render(request,'search.html',{"message":message})
-@login_required(login_url='/accounts/login/')
-def profile(request, username):
-    projo = Project.objects.all()
-    profile = User.objects.get(username=username)
-    # print(profile.id)
-    try:
-        profile_details = Profile.get_by_id(profile.id)
-    except:
-        profile_details = Profile.filter_by_id(profile.id)
-    projo = Project.get_profile_projects(profile.id)
-    title = f'@{profile.username} award projects and screenshots'
+        return render(request, 'search.html',{"message":message})
 
-    return render(request, 'profile.html', locals())
-    '''
-    editing user profile fillform & submission
- 
-    '''
-@login_required(login_url='/accounts/login/')
-def edit(request):
-    profile = User.objects.get(username=request.user)
+def search_project(request,project_id):
+    try :
+        project = project.objects.get(id = project_id)
 
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            edit = form.save(commit=False)
-            edit.user = request.user
-            edit.save()
-            return redirect('edit_profile')
-    else:
-        form = ProfileForm()
-    return render(request, 'edit_profile.html', locals())
+    except ObjectDoesNotExist:
+        raise Http404()
 
-    '''
-    logs out current user from account
-    '''
-def logout(request):
-    return render(request, 'home.html')
-
-def rate(request):
-    profile = User.objects.get(username=request.user)
-    return render(request,'rate.html',locals())
-
-def view_rate(request,project_id):
-    user = User.objects.get(username=request.user)
-    project = Project.objects.get(pk=project_id)
-    rate = Rate.objects.filter(project_id=project_id)
-    print(rate)
-    return render(request,'project.html',locals())
-
-@login_required(login_url='/accounts/login')
-def rate_project(request,project_id):
-    project = Project.objects.get(pk=project_id)
-    profile = User.objects.get(username=request.user)
-    if request.method == 'POST':
-        rateform = RateForm(request.POST, request.FILES)
-        print(rateform.errors)
-        if rateform.is_valid():
-            rating = rateform.save(commit=False)
-            rating.project = project
-            rating.user = request.user
-            rating.save()
-            return redirect('vote',project_id)
-    else:
-        rateform = RateForm()
-    return render(request,'rate.html',locals())
-
-@login_required(login_url='/accounts/login/')
-def vote(request,project_id):
-   try:
-       project = Project.objects.get(pk=project_id)
-       rate = Rate.objects.filter(project_id=project_id).all()
-       print([r.project_id for r in rate])
-       rateform = RateForm()
-   except DoesNotExist:
-       raise Http404()
-   return render(request,"project.html", locals())
+    return render(request, 'project-detail.html', {'project':project})
 
 class ProfileList(APIView):
     def get(self, request, format=None):
-        all_profile = Profile.objects.all()
+        all_profile = AwardsProfiles.objects.all()
         serializers = ProfileSerializer(all_profile, many=True)
         return Response(serializers.data)
 
@@ -144,19 +126,44 @@ class ProfileList(APIView):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-    permission_classes = (IsAdminOrReadOnly,)
+        permission_classes = (IsAdminOrReadOnly,)
 
 class ProjectList(APIView):
     def get(self, request, format=None):
-        all_project = Project.objects.all()
+        all_project = AwardsProjects.objects.all()
         serializers = ProjectSerializer(all_project, many=True)
         return Response(serializers.data)
 
     def post(self, request, format=None):
-        serializers = ProjectSerializer(data=request.data)
+        serializers =  ProjectSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+        permission_classes = (IsAdminOrReadOnly,)
+
+class ProfileDescription(APIView):
     permission_classes = (IsAdminOrReadOnly,)
+    def get_profile(self, pk):
+        try:
+            return ProfileList.objects.get(pk=pk)
+        except ProfileList.DoesNotExist:
+            return Http404
+
+    def get(self, request, pk, format=None):
+        merch = self.get_profile(pk)
+        serializers = ProfileSerializer(merch)
+        return Response(serializers.data)
+
+class ProjectDescription(APIView):
+    permission_classes = (IsAdminOrReadOnly,)
+    def get_project(self, pk):
+        try:
+            return ProjectList.objects.get(pk=pk)
+        except ProjectList.DoesNotExist:
+            return Http404
+
+    def get(self, request, pk, format=None):
+        merch = self.get_project(pk)
+        serializers = ProjectSerializer(merch)
+        return Response(serializers.data)
