@@ -3,19 +3,25 @@
 {% block content %}
 <div class="container">
     <div class="row">
+
         {% if projects %}
-        {% for project in projects %}
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="color:white">
-            <img class='streamimg' src="{{project.image.url}}" height="300px" width="95%" alt="{{ project.title }}"></img>
+        <div class="col s12 m7">
+            <div class="card">
+                {% for project in projects %}
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="color:white">
+                    <img class='streamimg' src="{{project.image.url}}" height="300px" width="95%" alt="{{ project.title }}"></img>
+                    <br>
+                    <h5 class="card-title firstletter">{{project.title}}</h5>
+                    <p class="card-text firstletter">{{ project.description | truncatechars:450 }}</p>
+                    <p class="card-text"><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-primary">View
+                                Project</button></a></p>
+                </div>
+            </div>
             <br>
-            <h5 class="card-title firstletter">{{project.title}}</h5>
-            <p class="card-text firstletter">{{ project.description | truncatechars:450 }}</p>
-            <p class="card-text"><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-primary">View
-                        Project</button></a></p>
+
             <br>
+            {% endfor %}
         </div>
-        <br>
-        {% endfor %}
         {% else %}
         <h3> Add Projects<a href="{% url 'new_projects' %}">here</a>.</h3>
         {% endif %}
