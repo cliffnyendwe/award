@@ -2,8 +2,39 @@
 {% block content %}
 {{ block.super }}
 <div class="container-fluid home-content">
+  <a class="btn modal-trigger" style="float:right;" href="#modal1">Contact</a>
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content" style="text-align: center;font-size: x-large;">
+      <h3>Contacts</h3>
+      <ul>
+        <li>
+          Email address: cliffnyendwe2018@gmail.com
+        </li>
+        <li>
+          Phone number: 0710755511
+        </li>
+        <li>
+          Facebook: carliz
+        </li>
+        <li>
+          twitter: #carlizaward
+        </li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $('.modal').modal();
+    });
+  </script>
   <h3 style="font-family: 'Cormorant Garamond', serif;">WELCOME TO AWARD</h3>
   <h4 style="font-family: 'Dancing Script', cursive;text-align: center;">To day is on
-        {{date|date:"l d-F Y"}}</h4> 
+    {{date|date:"l d-F Y"}}</h4>
 
-{% endblock %}
+  {% endblock %}

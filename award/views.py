@@ -32,9 +32,6 @@ def myprojects(request):
     projects = Project.objects.all().order_by()
     return render(request,'myprojects.html', {'projects':projects})
 
-def contact(request):
-    return render(request,'contact.html')
-
 def project(request,project_id):
     project = Project.objects.get(id = project_id)
     rating = round(((project.design + project.usability + project.content)/3),2)
