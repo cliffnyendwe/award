@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-  <div class="container">
-      <div class="intro">
-          <h2>Update Profile</h2>
-        </div>
-  <hr>
-  <form  action="{%url 'profile' %}" method="post" enctype="multipart/form-data">
-    {%csrf_token%}
+<div class="container" style="text-align: center;width: 50%;;">
+  <div class="row">
+    <div class="col s12 m7">
+      <div class="card" style="background-color:#00897b; ">
+        <h4>Update Profile</h4>
 
-    {{ form  }}
-    <input type="submit" class="btn btn-success btn-lg" value="Update Profile">
-  </form>
+        <br>
+        <form action="{%url 'profile' %}" method="post" enctype="multipart/form-data">
+          {%csrf_token%}
 
+          {{ form }}
+          <input type="submit" class="btn btn-success btn-lg" value="Update Profile">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

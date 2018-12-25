@@ -1,70 +1,30 @@
-
 {%extends 'base.html'%}
-
 {% block content %}
 <div class="container">
   <div class="row">
     <h1 class="text-center">{{project.project}}</h1>
   </div>
-  <hr>
-
   <div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-6">
-      <img src="{{project.image.url}}" width="500px" height="500px" class="img-responsive" alt="">
-    </div>
-    <div class="col-md-3">
-    </div>
-  </div>
-<br>
-<br>
+    <div class="col s12 m7">
+      <div class="card" style="width: 370px;background-color: cornsilk;">
+        <div class="card-image" style="text-align: center;">
 
-   <div class="row">
-   {% autoescape on %}
-   {{image.post| safe}}
-   {% endautoescape %}
+            <img src="{{project.image.url}}" width="200px" height="380px" class="img-responsive" alt="">
+       
+        </div>
+        <br>
 
-   </div>
-
-
-  <div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-6 text-center">
-
-      <b><p class = "text-center"> <a style="color:black;"href="{{project.link}}">{{project.link}}</a></p>
-      <p style="color:black;">{{project.description}}</p>
-      <button type="button" name="button"> <a href="/project-vote/{{project.id}}"> vote</a></button>
-      </b>
-    </div>
-    <div class="col-md-3">
+        <div class="row">
+          <div class="card-action">
+            <p class="text-center"> <a style="color:black;font-size: large;" href="{{project.link}}">{{project.link}}</a></p>
+            <p style="color:black;">{{project.description}}</p>
+            </b>
+            <hr>
+            <b>design : {{project.design}} usability: {{project.usability}} Content: {{project.content}}</b>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <br><br>
-  <div class="col-md-3">
-
-  </div>
-  <div class="col-md-6">
-   <hr>
-    <b>design : {{project.design}} usability: {{project.usability}} Content: {{project.content}}</b>
-  <hr>
-  </div>
-
-  <div class="col-md-3">
-
-  </div>
-  <br><br>
-  <div class="progress" style="color:black;">
-     Design: <div class="progress-bar progress-bar-success" role="progressbar"  aria-valuemin="0" aria-valuemax="10" style="width:40%">
-     Usability: <div class="progress-bar progress-bar-success" role="progressbar"  aria-valuemin="0" aria-valuemax="10" style="width:40%">
-     Context: <div class="progress-bar progress-bar-success" role="progressbar"  aria-valuemin="0" aria-valuemax="10" style="width:40%">
-
-
-    </div>
-  </div>
-
-
 </div>
-
 {% endblock %}

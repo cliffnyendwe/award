@@ -70,7 +70,7 @@ def new_projects(request):
         form = ProjectForm()
     return render(request, 'new_project.html', {"form": form})
 
-@login_required(login_url='/accounts/login/')
+
 def profile(request):
     current_user = request.user
     # projects = project.objects.filter(profile=current_user)
