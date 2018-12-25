@@ -2,15 +2,13 @@
 {% load static %}
 {% block content %}
 <div class="container">
-
-
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
       <form action="{% url 'new_projects' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+       <p style="color:black;">{% csrf_token %}</p>
         <br>
-        <p style="width:50%">{{ form }}</p>
+        <p style="width:50%;color:black" >{{ form }}</p>
         <br><br>
         <input type="submit" class="btn btn-success btn-md" value="Add Project">
 
