@@ -1,25 +1,27 @@
 {%extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="container">
-    
-        <div class="card-body" style="background-color: cornsilk;"></div>
-            {% if projects %}
-            <div class="row">
-            <div class="col s12 m6 l3">
+<div class="container" style="text-align: center;">
+    <div class="row">
+        {% if projects %}
+        <div class="row">
+            <div class="col sm12 md6 lg6">
                 {% for project in projects %}
-                    <img class='streamimg' src="{{project.image.url}}" height="300px" width="75%" alt="{{ project.title }}"></img>
+
+                <div class="card-panel" style="color:#00897b;">
+                    <img class='streamimg' src="{{project.image.url}}" height="350px" width="60%" alt="{{ project.title }}"></img>
                     <br>
                     <h5>{{project.title}}</h5>
                     <p>{{ project.description | truncatechars:250 }}</p>
-                    <p><a href="{% url 'project' project.id %}"><button type="button" class="btn btn-primary">View
-                    Project</button></a></p>
-                <br>
-                {% endfor %}
+                    <p><a href="{% url 'project' project.id %}"><button type="button" class="btn">View
+                                Project</button></a></p>
+                    <hr>
+                    {% endfor %}
 
-                {% else %}
-                <h3> Add Projects<a href="{% url 'new_projects' %}">here</a>.</h3>
-                {% endif %}
+                    {% else %}
+                    <h3> Add Projects</h3>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

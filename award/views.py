@@ -22,6 +22,8 @@ def convert_dates(dates):
     day = days[day_number]
     return day
 
+
+@login_required(login_url='/accounts/login/')
 def index(request):
     current_user = request.user
     projects = Project.objects.all().order_by()
@@ -70,13 +72,11 @@ def new_projects(request):
         form = ProjectForm()
     return render(request, 'new_project.html', {"form": form})
 
-
+    
+@login_required(login_url='/accounts/login/')
 def profile(request):
     current_user = request.user
-    # projects = project.objects.filter(profile=current_user)
-
     print(current_user)
-
     return render(request, 'profile.html',{'profile':profile})
 
 def newprofile(request):
@@ -98,7 +98,6 @@ def search_results(request):
         search_term = request.GET.get("project")
         searched_projects = project.search_by_title(search_term)
         message = f"{search_term}"
-
         return render(request, 'search.html',{"message":message,"projects": searched_projects})
 
     else:
@@ -127,7 +126,6 @@ class ProfileList(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         permission_classes = (IsAdminOrReadOnly,)
-
 class ProjectList(APIView):
     def get(self, request, format=None):
         all_project = AwardsProjects.objects.all()
@@ -141,7 +139,6 @@ class ProjectList(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         permission_classes = (IsAdminOrReadOnly,)
-
 class ProfileDescription(APIView):
     permission_classes = (IsAdminOrReadOnly,)
     def get_profile(self, pk):

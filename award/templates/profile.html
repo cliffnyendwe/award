@@ -15,7 +15,7 @@
     </div>
     <h1 class="profile-user-name" style="color:black">{{profile.profile}}</h1>
     <h3 style="color:black">{{profile.contact}}</h3>
-    <button class="btn profile-create-btn"><a href="{% url 'newprofile' %}">Edit profile</a> </button>
+    <button class="btn btn"><a href="{% url 'newprofile' %}">Edit profile</a> </button>
     {% for project in projects %}
     <p>Title: {{project.title}}</p>
     <img src="{{project.image.url}}" class="radius" alt="Project" class="img-responsive">

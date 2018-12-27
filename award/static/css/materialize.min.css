@@ -7,3 +7,12 @@ body{
     background-image: url('https://www.porreda.com/acatalog/SY3030.jpg');
     background-size: cover;
 }
+
+#slide-out{
+    background-image: url('https://images.unsplash.com/photo-1540202404-d0c7fe46a087?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=890&q=80');
+    background-size: cover;
+}
+
+.list{
+    font-family: 'Source Serif Pro', serif;
+}
