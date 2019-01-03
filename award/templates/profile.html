@@ -9,16 +9,12 @@
       </div>
 <hr>
 {% if profile.bio %}
-<div id='user-details'>
-    <p><img class="circularsquare" src="{{profile.profpic.url}}" alt=""><span class="repo-owner firstletter" style='padding:1.5em;'>{{user.username}}</span>
-    </p>
     <p>
       <span class='repo-owner' style=>Projects: </span>{{projectcount}}
     </p>
-</div>
     {{profile.bio}}
     <p></p>
-    <span><a class='maillink' href="mailto:{{profile.contact}}">{{profile.contact}}</a></span>
+    <span><a class='maillink' href="{{profile}}">{{profile}}</a></span>
     <p></p>
     <a href="{% url 'newprofile' %}"><button type="button" class="btn btn-info">Update Profile</button></a>   
     <br>

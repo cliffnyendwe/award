@@ -26,8 +26,6 @@ def convert_dates(dates):
 @login_required(login_url='/accounts/login/')
 def index(request):
   id = request.user.id
-  profile = Profile.objects.get(user=id)
-
   projects = Project.objects.all().order_by('-pub_date')
 
   return render(request, 'index.html',{'projects':projects,'profile':profile})
@@ -54,8 +52,6 @@ def new_projects(request):
     form = NewProjectForm(request.POST, request.FILES)
     if form.is_valid():
       project = form.save(commit=False)
-      project.poster = current_user
-      project.postername = current_username
       project.save()
     return redirect('index')
 
@@ -70,10 +66,8 @@ def profile(request, id):
   profile = Profile.objects.get(user=ida)
   user = request.user
   myprofile = Profile.objects.get(pk=id)
-  projects = Project.objects.filter(poster=ida).order_by('-pub_date')
-  projectcount=projects.count()
 
-  return render(request, 'profile.html',{'profile':profile,'myprofile':myprofile,'user':user,'projectcount':projectcount,'projects':projects})
+  return render(request, 'profile.html',{'profile':profile,'projects':projects})
 
 @login_required(login_url='/accounts/login/')
 def newprofile(request):
@@ -93,7 +87,7 @@ def newprofile(request):
 
   return render(request, 'newprofile.html',{'form':form,'profile':profile})
 
-def search_results(request):
+def search(request):
 
     if 'project' in request.GET and request.GET["project"]:
         search_term = request.GET.get("project")
@@ -104,15 +98,6 @@ def search_results(request):
     else:
         message = "You haven't searched for any term"
         return render(request, 'search.html',{"message":message})
-
-def search_project(request,project_id):
-    try :
-        project = project.objects.get(id = project_id)
-
-    except ObjectDoesNotExist:
-        raise Http404()
-
-    return render(request, 'project-detail.html', {'project':project})
 
 class ProfileList(APIView):
     def get(self, request, format=None):

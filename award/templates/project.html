@@ -2,48 +2,43 @@
 {% load bootstrap4 %}
 
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col sm12 md6 lg4">
-      <div class="card-panel">
-        <div class="intro">
+<div class="container" style="text-align: center;">
+  <div class="pic">
+    <div class="row">
+      <div class="col sm12 md6 lg4">
+        <div class="card-panel">
           <h2 class="firstletter">{{project.title}}</h2>
-        </div>
-        <hr>
 
-        <div class="card mb-3 bg-dark">
-          <img class='soloimg' src="{{project.image.url}}" width="400px" alt="{{ project.title }}">
-          <div class="card-body">
-            <h5 class="card-title firstletter">{{project.title}}</h5>
-            <p class="card-text">
-              <p>{{project.description}}</p>
-              <p><a target="_blank" href="{{ project.link }}"><button type="button" class="btn btn-info">View project</button></a>
+          <div class="card">
+            <img class='soloimg' src="{{project.image.url}}" width="500px" ;height="300px" alt="{{ project.title }}">
+            <div class="card-body">
+              <h5 class="card-title firstletter">{{project.title}}</h5>
+              <p class="card-text">
+                <p>{{project.description}}</p>
+                <p><a target="_blank" href="{{ project.link }}"><button type="button" class="btn btn-info">View project</button></a>
+                </p>
               </p>
-            </p>
-  
+
+            </div>
           </div>
+          <a href="{% url 'newrating' project.id %}"><button type="button" class="btn btn-primary">Rate now</button></a>
+
+          {% if ratings%}
+          <div class="row ">
+            <h5>Your Rates</h5>
+            {% for rating in ratings %}
+            <div class="col s12 m12 l4">
+              <p>Design: {{rating.design}}</p>
+              <p>Usability: {{rating.usability}}</p>
+              <p>Content: {{rating.content}}</p>
+              <p></p>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <h4> No Ratings as per now.</h4>
+          {% endif %}
         </div>
-        <p></p>
-        <a href="{% url 'newrating' project.id %}"><button type="button" class="btn btn-primary">Rate now</button></a>
-        <br>
-        <br>
-
-        {% if ratings%}
-        <h5>Your Rates</h5>
-        {% for rating in ratings %}
-        <p>Design: {{rating.design}}</p>
-        <p>Usability: {{rating.usability}}</p>
-        <p>Content: {{rating.content}}</p>
-        <p></p>
-        <p>Average: {{rating.average}}</p>
-        <footer class="blockquote-footer" style="color:white;"><cite title="Source Title">{{rating.postername}}</cite></footer>
-
-        <p></p>
-        {% endfor %}
-
-        {% else %}
-        <h4> No Ratings as per now.</h4>
-        {% endif %}
       </div>
     </div>
   </div>

@@ -16,3 +16,15 @@ body{
 .list{
     font-family: 'Source Serif Pro', serif;
 }
+
+.card{
+    text-align: center;
+}
+
+.pic{
+    text-align: center;
+}
+
+.card-panel{
+    text-align: center;
+}
