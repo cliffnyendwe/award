@@ -98,9 +98,7 @@ whitenoise==4.1.2
 
 This are features that i didnt manage to accomplish but soon i will include them.
 
-* Rating form.
 * Comment form.
-* Viewing overall scores
 
 # License
 The project is under license by MIT

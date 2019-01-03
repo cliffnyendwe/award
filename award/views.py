@@ -177,17 +177,6 @@ def newrating(request,id):
     form = NewRatingForm(request.POST)
     if form.is_valid():
       rating = form.save(commit=False)
-
-      design_rating = form.cleaned_data['design']
-      usability_rating = form.cleaned_data['usability']
-      content_rating = form.cleaned_data['content']
-
-      avg = ((design_rating + usability_rating + content_rating)/3)
-
-      rating.average = avg
-      rating.postername = current_username
-      rating.project = Project.objects.get(pk=id)
-
       rating.save()
     return redirect('project',id)
 
