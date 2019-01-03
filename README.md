@@ -2,7 +2,7 @@
 
 By Cliff Nyendwe, 17/12/2018
 
-# Django admin username
+### Django admin username
 
 Use the username below to get into my admin
 * cliff
@@ -85,7 +85,6 @@ whitenoise==4.1.2
 
 * python3.6 manage.py migrate
 * Then serve the app, so that the app will be available on localhost:8000, to do this run the command below
-
 * python manage.py runserver
 * Use the navigation bar/navbar/navigation pane/menu to navigate and explore the app.
 
