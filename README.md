@@ -19,11 +19,11 @@ projects.
 
 # Features
 
-* Sign in to the application to start using.
-* Upload my pictures to the application.
-* See my profile with all my pictures.
-* Follow other users and see their pictures on my timeline.
-* Like a picture and leave a comment on it.
+* Users can view posted projects and their details.
+* Users can post a project to be rated/reviewed.
+* Users can rate/ review other users' projects.
+* Users can search for projects.
+* Users can view their profile page.
 
 # Live Demo
 
@@ -101,6 +101,7 @@ This are features that i didnt manage to accomplish but soon i will include them
 
 * Rating form.
 * Comment form.
+* Viewing overall scores
 
 # License
 The project is under license by MIT
