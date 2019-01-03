@@ -1,34 +1,27 @@
-
 {% load bootstrap4 %} 
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>New Project</title>
-  {{form.media}}
-
-{% block styles %} {% bootstrap_css %}
+  <title>Rate</title>
+{% block styles %} 
+{% bootstrap_css %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endblock %}
-
 </head>
 
 <body>
-  {% include 'navbar.html' %}
-<div class="container">
-
-    <div class="intro">
-        <h2>New Project</h2>
-      </div>
-<hr>
-  <form  action="{%url 'new_projects'%}" method="post" enctype="multipart/form-data">
+    {% include 'navbar.html' %}
+  <div class="container-fluid">
+      <div class="intro">
+          <h2 style=text-align:center;>Rate Now</h2>
+        </div>
+  <form  action="{%url 'newrating' idd %}" method="post" enctype="multipart/form-data">
     {%csrf_token%}
 
     {% bootstrap_form form%}
-    <input type="submit" class="btn btn-success btn-lg" value="Add Project">
+    <input type="submit" class="btn btn-success btn-lg" value="Rate">
   </form>
 
   {% block scripts %}

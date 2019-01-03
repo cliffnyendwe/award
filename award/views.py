@@ -2,10 +2,10 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseRedirect,Http404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from .forms import ProjectForm,ProfileForm,VoteForm
+from .forms import NewProjectForm, NewRatingForm, NewProfileForm
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import  Project,Profile,AwardsProfiles,AwardsProjects
+from .models import  Project,Profile,AwardsProfiles,AwardsProjects,Rating
 from .serializer import ProfileSerializer,ProjectSerializer
 from rest_framework import status
 from .permissions import IsAdminOrReadOnly
@@ -25,72 +25,73 @@ def convert_dates(dates):
 
 @login_required(login_url='/accounts/login/')
 def index(request):
-    current_user = request.user
-    projects = Project.objects.all().order_by()
-    return render(request,'index.html', {'projects':projects})
+  id = request.user.id
+  profile = Profile.objects.get(user=id)
+
+  projects = Project.objects.all().order_by('-pub_date')
+
+  return render(request, 'index.html',{'projects':projects,'profile':profile})
 
 @login_required(login_url='/accounts/login/')
 def myprojects(request):
     projects = Project.objects.all().order_by()
     return render(request,'myprojects.html', {'projects':projects})
 
-def project(request,project_id):
-    project = Project.objects.get(id = project_id)
-    rating = round(((project.design + project.usability + project.content)/3),2)
-    if request.method == 'POST':
-        form = VoteForm(request.POST)
-        if form.is_valid:
-            if project.design == 1:
-                project.design = int(request.POST['design'])
-            else:
-                project.design = (project.design + int(request.POST['design']))/2
-            if project.usability == 1:
-                project.usability = int(request.POST['usability'])
-            else:
-                project.usability = (project.design + int(request.POST['usability']))/2
-            if project.content == 1:
-                project.content = int(request.POST['content'])
-            else:
-              project.content = (project.design + int(request.POST['content']))/2
-            project.save()
-    else:
-        form = VoteForm()
-    return render(request,'project.html',{'form':form,'project':project,'rating':rating})
+@login_required(login_url='/accounts/login/')
+def project(request, id):
+  ida = request.user.id
+  project = Project.objects.get(pk=id)
+  ratings = Rating.objects.filter(project=id)
+  project = Project.objects.get(pk=id)
+
+  return render(request, 'project.html',{'profile':profile,'project':project,'ratings':ratings})
 
 @login_required(login_url='/accounts/login/')
 def new_projects(request):
-    current_user = request.user
-    if request.method == 'POST':
-        form = ProjectForm(request.POST, request.FILES)
-        if form.is_valid():
-            project = form.save(commit=False)
-            project.user = current_user
-            project.save()
-        return redirect('index')
+  ida = request.user.id
 
-    else:
-        form = ProjectForm()
-    return render(request, 'new_project.html', {"form": form})
+  if request.method == 'POST':
+    form = NewProjectForm(request.POST, request.FILES)
+    if form.is_valid():
+      project = form.save(commit=False)
+      project.poster = current_user
+      project.postername = current_username
+      project.save()
+    return redirect('index')
 
-    
+  else:
+    form = NewProjectForm()
+
+  return render(request, 'new_project.html',{'form':form,'profile':profile})
+ 
 @login_required(login_url='/accounts/login/')
-def profile(request):
-    current_user = request.user
-    print(current_user)
-    return render(request, 'profile.html',{'profile':profile})
+def profile(request, id):
+  ida = request.user.id
+  profile = Profile.objects.get(user=ida)
+  user = request.user
+  myprofile = Profile.objects.get(pk=id)
+  projects = Project.objects.filter(poster=ida).order_by('-pub_date')
+  projectcount=projects.count()
 
+  return render(request, 'profile.html',{'profile':profile,'myprofile':myprofile,'user':user,'projectcount':projectcount,'projects':projects})
+
+@login_required(login_url='/accounts/login/')
 def newprofile(request):
-    current_user = request.user
-    if request.method == 'POST':
-        form = ProjectForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile = form.save(commit = False)
-            profile.project = current_user
-            profile.save()
-        return redirect('index.html')
-    else:
-        form = ProfileForm()
-    return render(request,'newprofile.html',{'form':form})
+  ida = request.user.id
+  profile = Profile.objects.get(user=ida)
+  
+  if request.method == 'POST':
+    instance = get_object_or_404(Profile, user=ida)
+    form = NewProfileForm(request.POST, request.FILES,instance=instance)
+    if form.is_valid():
+      form.save()
+
+    return redirect('profile', ida)
+
+  else:
+    form = NewProfileForm()
+
+  return render(request, 'newprofile.html',{'form':form,'profile':profile})
 
 def search_results(request):
 
@@ -164,3 +165,33 @@ class ProjectDescription(APIView):
         merch = self.get_project(pk)
         serializers = ProjectSerializer(merch)
         return Response(serializers.data)
+
+@login_required(login_url='/accounts/login/')
+def newrating(request,id):
+  ida = request.user.id
+  idd = id
+
+  current_username = request.user.username
+
+  if request.method == 'POST':
+    form = NewRatingForm(request.POST)
+    if form.is_valid():
+      rating = form.save(commit=False)
+
+      design_rating = form.cleaned_data['design']
+      usability_rating = form.cleaned_data['usability']
+      content_rating = form.cleaned_data['content']
+
+      avg = ((design_rating + usability_rating + content_rating)/3)
+
+      rating.average = avg
+      rating.postername = current_username
+      rating.project = Project.objects.get(pk=id)
+
+      rating.save()
+    return redirect('project',id)
+
+  else:
+    form = NewRatingForm()
+
+  return render(request, 'newrating.html',{'form':form,'profile':profile,'idd':idd})

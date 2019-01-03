@@ -11,7 +11,7 @@ urlpatterns=[
     url(r'^newprofile/$',views.newprofile,name = 'newprofile'),
     url(r'^myprojects/$',views.myprojects,name = 'myprojects'),
     url(r'^search/', views.search_results, name='search_results'),
-    url(r'^project_detail/(\d+)',views.search_project,name = 'project-detail'),
+    url(r'^new/rating/(\d+)',views.newrating, name='newrating'),
     url(r'^api/profile/$', views.ProfileList.as_view()),
     url(r'^api/project/$', views.ProjectList.as_view()),
     

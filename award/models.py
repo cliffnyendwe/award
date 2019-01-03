@@ -11,9 +11,8 @@ class Project(models.Model):
     description = models.TextField(max_length = 500)
     link = models.TextField(validators=[URLValidator()],null=True)
     profile = models.ForeignKey(User,on_delete=models.CASCADE, null=True)
-    design=models.PositiveIntegerField(choices=list(zip(range(1, 11), range(1, 11))), default=1)
-    usability=models.PositiveIntegerField(choices=list(zip(range(1, 11), range(1, 11))), default=1)
-    content=models.PositiveIntegerField(choices=list(zip(range(1, 11), range(1, 11))), default=1)
+    
+  
 
     def save_project(self):
         self.save()
@@ -57,3 +56,23 @@ class AwardsProfiles(models.Model):
 class AwardsProjects(models.Model):
     project_name = models.CharField(max_length=40)
     description = models.TextField()
+
+
+class Rating(models.Model):
+
+  CHOICES = [(i,i) for i in range(11)]
+
+  design = models.IntegerField(choices=CHOICES)
+  usability = models.IntegerField(choices=CHOICES)
+  content = models.IntegerField(choices=CHOICES)
+  average = models.IntegerField()
+  project = models.ForeignKey(Project, on_delete=models.CASCADE)
+  postername = models.CharField(max_length=60)
+  pub_date = models.DateTimeField(auto_now_add=True)
+
+
+  def save_rating(self):
+    self.save()
+
+  def delete_rating(self):
+    self.delete()
