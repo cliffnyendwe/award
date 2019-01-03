@@ -1,16 +1,21 @@
-# Instagram
+# AWARD
+
 By Cliff Nyendwe, 17/12/2018
 
 # Django admin username
+
 Use the username below to get into my admin
 * cliff
 
 ### Django admin password
+
 This is my password
 * cliff123
 
 # Description
-Instagram is an application where users can view their images/photos once they havve created an account,logged in and .
+
+Awward is an application that enables users after signing up and logging in to view and see different
+projects.
 
 # Features
 
@@ -34,12 +39,11 @@ Kindly to access code clone the repository.
 
 # Motivation
 
-To let people be able to access different images/photos.
+To let people know the latest projects.
 
 # Language used
 
 Django - web framework used
-Javascript
 HTML
 CSS
 
@@ -68,14 +72,14 @@ whitenoise==4.1.2
 
 * The repo comes in a zipped or compressed format. Extract to your prefered location and open it.
 
-* open your terminal and navigate to gallery then create a virtual environment.For detailed guide refer here
+* open your terminal and navigate to award then create a virtual environment.For detailed guide refer here
 
 * To run the app, you'll have to run the following commands in your terminal
 
 * pip install -r requirements.txt
 * On your terminal,Create database gallery using the command below.
 
-### CREATE DATABASE grammy;
+### CREATE DATABASE award;
 
 * Migrate the database using the command below
 
@@ -90,6 +94,13 @@ whitenoise==4.1.2
 * sudo apt-get install python3.6-venv
 * python3.6 -m venv virtual
 * source virtual/bin/activate
+
+# Known Bugs & Missing Features
+
+This are features that i didnt manage to accomplish but soon i will include them.
+
+* Rating form.
+* Comment form.
 
 # License
 The project is under license by MIT
