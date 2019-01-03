@@ -1,0 +1,1 @@
+web: gunicorn cliff-award.wsgi
