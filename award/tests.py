@@ -12,13 +12,33 @@ class ProfileTestClass(TestCase):
     def test_instance(self):
         self.assertTrue(isinstance(self.new_profile,Profile))
 
-    # #Testing Save Method
-    # def test_save_method(self):
-    #     self.new_profile.save_profile()
-    #     profiles=Profile.objects.all()
-    #     self.assertTrue(len(profiles)>0)
+    def test_save_method(self):
+        """
+        Function to test that profile is being saved
+        """
+        self.profile.save_profile()
+        profiles = Profile.objects.all()
+        self.assertTrue(len(profiles) > 0)
 
-    # def test_delete_method(self):
-    #     self.new_profile.save_profile()
-    #     self.new_profile.delete_profile
-    
+
+
+class ProjecTestClass(TestCase):
+    """  
+    Tests Project class and its functions
+    """
+    def setUp(self):
+        self.project = Project()
+
+    def test_instance(self):
+        self.assertTrue(isinstance(self.project, Project))
+
+    def test_save_method(self):
+        """
+        Function to test that a project is being saved
+        """
+        self.project.save_project()
+        projects = Project.objects.all()
+        self.assertTrue(len(projects) > 0)
+
+  
+
