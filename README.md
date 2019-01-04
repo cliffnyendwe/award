@@ -68,7 +68,7 @@ whitenoise==4.1.2
 
 # Installation Requirements
 
-* Clone this repo: git clone https://github.com/cliffnyendwe/instagram.git
+* Clone this repo: git clone https://github.com/cliffnyendwe/award.git
 
 * The repo comes in a zipped or compressed format. Extract to your prefered location and open it.
 
