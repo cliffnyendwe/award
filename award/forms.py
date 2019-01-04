@@ -11,7 +11,7 @@ class NewProjectForm(forms.ModelForm):
 class NewRatingForm(forms.ModelForm):
   class Meta:
     model = Rating
-    exclude = ['average','project','postername','pub_date']
+    exclude = ['project','postername','pub_date']
 
 
 class NewProfileForm(forms.ModelForm):

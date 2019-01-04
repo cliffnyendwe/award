@@ -1,6 +1,6 @@
 # AWARD
 
-By Cliff Nyendwe, 17/12/2018
+By Cliff Nyendwe, 03/01/2019
 
 ### Django admin username
 
@@ -27,7 +27,7 @@ projects.
 
 # Live Demo
 
-Run this url link:https://cliff-grammy.herokuapp.com/
+Run this url link:https://cliff-award.herokuapp.com/
 
 # Contacts
 To find me, use: cliffnyendwe2018@gmail.com

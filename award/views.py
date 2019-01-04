@@ -70,7 +70,7 @@ def profile(request, id):
   return render(request, 'profile.html',{'profile':profile,'projects':projects})
 
 @login_required(login_url='/accounts/login/')
-def newprofile(request):
+def edit_profile(request):
   ida = request.user.id
   profile = Profile.objects.get(user=ida)
   
@@ -85,7 +85,7 @@ def newprofile(request):
   else:
     form = NewProfileForm()
 
-  return render(request, 'newprofile.html',{'form':form,'profile':profile})
+  return render(request, 'edit_profile.html',{'form':form,'profile':profile})
 
 def search(request):
 
@@ -150,18 +150,22 @@ class ProjectDescription(APIView):
         merch = self.get_project(pk)
         serializers = ProjectSerializer(merch)
         return Response(serializers.data)
-
 @login_required(login_url='/accounts/login/')
 def newrating(request,id):
   ida = request.user.id
   idd = id
-
   current_username = request.user.username
 
   if request.method == 'POST':
     form = NewRatingForm(request.POST)
     if form.is_valid():
       rating = form.save(commit=False)
+      design_rating = form.cleaned_data['design']
+      usability_rating = form.cleaned_data['usability']
+      content_rating = form.cleaned_data['content']
+      rating.postername = current_username
+      rating.project = Project.objects.get(pk=id)
+
       rating.save()
     return redirect('project',id)
 

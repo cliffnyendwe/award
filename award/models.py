@@ -65,7 +65,6 @@ class Rating(models.Model):
   design = models.IntegerField(choices=CHOICES)
   usability = models.IntegerField(choices=CHOICES)
   content = models.IntegerField(choices=CHOICES)
-  average = models.IntegerField()
   project = models.ForeignKey(Project, on_delete=models.CASCADE)
   postername = models.CharField(max_length=60)
   pub_date = models.DateTimeField(auto_now_add=True)

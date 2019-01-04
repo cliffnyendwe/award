@@ -1,28 +1,39 @@
 
-{%extends 'base.html'%}
-{% block content %}
-<div class="container top">
-    <div class="row">
-        <div class="col-md-4 edit-areas">
-            <h3>Account</h3>
-            <br>
-            {% if profile.profile.Profile_photo %}
-            <img src="{{profile.profile.Profile_photo.url}}" alt="img" width="120px" height="120px ">
-            {% endif %}
-            <br>
-            <br>
-            <h6 style="padding-top:40px;color:black">Bio</h6>
-            <br>
-            <br>
-            <p style="padding-top:40px;color:black">{{user.profile.Bio}}</p>
+{% load bootstrap4 %} 
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Update Profile</title>
+  {{form.media}}
+
+{% block styles %} {% bootstrap_css %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endblock %}
+
+</head>
+
+<body>
+  {% include 'navbar.html' %}
+  <div class="container">
+      <div class="intro">
+          <h2>Update Profile</h2>
         </div>
-        <div class="col-md-8">
-            <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.media }}
-                <input type="submit" class="btn btn-success" value="Update">
-            </form>
-        </div>
-    </div>
+  <hr>
+  <form  action="{%url 'edit_profile' %}" method="post" enctype="multipart/form-data">
+    {%csrf_token%}
+
+    {% bootstrap_form form%}
+    <input type="submit" class="btn btn-success btn-lg" value="Update Profile">
+  </form>
+
+  {% block scripts %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  {% bootstrap_javascript %} {% endblock %}
 </div>
-{% endblock %}
+</body>
+
+</html>
